@@ -15,13 +15,14 @@ public class HttpConnectionService {
         conn.setRequestMethod("GET");
         conn.connect();
 
-        InputStream inputStream = conn.getInputStream();
-        conn.disconnect();
-
-        return inputStream;
+        return conn.getInputStream();
     }
 
     public static URL createURL(String query) throws MalformedURLException {
         return new URL(query);
+    }
+
+    public static void closeStream(InputStream stream) throws IOException {
+        stream.close();
     }
 }
