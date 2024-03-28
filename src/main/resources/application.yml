@@ -11,3 +11,5 @@ spring:
     console:
       enabled: true
       path: /h2-console
+app:
+  currencyLayerAccessKey: ebeb1f255d0c5847c54c7a37de6b0ea8
