@@ -2,13 +2,12 @@ package com.fea.foreign.exchange.app.service;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.URL;
 
@@ -20,32 +19,28 @@ public class ExchangeRateService {
     private final static String CURRENCIES_PARAM = "&currencies=";
 
     @Value("?access_key=" + "${app.currencyLayerAccessKey}")
-    private String currencyLayerAccessKey;
+    public String currencyLayerAccessKey;
+
+    private HttpConnectionService httpConnection;
+
+    @Autowired
+    public ExchangeRateService(HttpConnectionService httpConnection) {
+        this.httpConnection = httpConnection;
+    }
+
+    //May hold methods concerning exchange rate operations: fetch by single currency target, multiple currency targets, historical exchange rates, etc.
 
     public BigDecimal fetchFxRateBySourceAndTarget(String source, String target) throws IOException {
-        URL url = HttpConnectionService.createURL(CURRENCY_LAYER_BASE_URL + LIVE_ENDPOINT + currencyLayerAccessKey + SOURCE_PARAM + source + CURRENCIES_PARAM + target);
-        InputStream stream = HttpConnectionService.establishConnection(url);
+        URL url = httpConnection.createURL(CURRENCY_LAYER_BASE_URL + LIVE_ENDPOINT + currencyLayerAccessKey + SOURCE_PARAM + source + CURRENCIES_PARAM + target);
+        InputStream stream = httpConnection.establishConnection(url);
 
-        String response = getResponseFromStream(stream);
-        HttpConnectionService.closeStream(stream);
+        String response = httpConnection.getResponseFromStream(stream);
 
         return parseFxRate(response, source, target);
     }
 
-    private BigDecimal parseFxRate(String response, String source, String target) {
+    public BigDecimal parseFxRate(String response, String source, String target) {
         JsonObject jsonObject = new Gson().fromJson(response, JsonObject.class);
         return jsonObject.getAsJsonObject("quotes").get("" + source + target).getAsBigDecimal();
-    }
-
-    private static String getResponseFromStream(InputStream stream) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        StringBuilder response = new StringBuilder();
-
-        String line;
-        while ((line = reader.readLine()) != null) {
-            response.append(line);
-        }
-        reader.close();
-        return response.toString();
     }
 }
