@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:h2:mem:foreignexchangedb
     driver-class-name: org.h2.Driver
-    username: sa
+    username: admin
     password:
     initialization-mode: always
     schema: classpath:schema.sql

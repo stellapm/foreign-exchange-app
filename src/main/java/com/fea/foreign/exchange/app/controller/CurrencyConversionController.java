@@ -5,10 +5,9 @@ import com.fea.foreign.exchange.app.model.view.CurrencyConversionResponseView;
 import com.fea.foreign.exchange.app.service.CurrencyConversionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 import static com.fea.foreign.exchange.app.constants.Endpoints.*;
 
@@ -22,8 +21,10 @@ public class CurrencyConversionController {
         this.currencyConversionService = currencyConversionService;
     }
 
-    @GetMapping(GET)
-    public ResponseEntity<CurrencyConversionResponseView> getCurrencyConversion(@RequestBody CurrencyConversionRequestDTO currencyConversionRequestDTO){
-        return ResponseEntity.ok(new CurrencyConversionResponseView());
+    @PostMapping(CONVERT)
+    public ResponseEntity<CurrencyConversionResponseView> convertCurrency(@RequestBody CurrencyConversionRequestDTO currencyConversionRequestDTO) throws IOException {
+        CurrencyConversionResponseView response = this.currencyConversionService.convertCurrency(currencyConversionRequestDTO);
+
+        return ResponseEntity.ok(response);
     }
 }
