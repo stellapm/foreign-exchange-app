@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-import static com.fea.foreign.exchange.app.constants.Endpoints.API;
-import static com.fea.foreign.exchange.app.constants.Endpoints.FX_RATE;
+import static com.fea.foreign.exchange.app.constants.Endpoints.*;
 
 @RestController
-@RequestMapping(API)
+@RequestMapping(API + FX_RATE)
 public class ExchangeRateController {
     private final ExchangeRateService exchangeRateService;
 
@@ -21,7 +20,7 @@ public class ExchangeRateController {
         this.exchangeRateService = exchangeRateService;
     }
 
-    @GetMapping(FX_RATE)
+    @GetMapping(GET)
     public ResponseEntity<BigDecimal> getExchangeRate(@RequestParam String sourceCurrency,
                                                   @RequestParam String targetCurrency) throws IOException {
         BigDecimal exchangeRate = this.exchangeRateService.fetchFxRateBySourceAndTarget(sourceCurrency, targetCurrency);
