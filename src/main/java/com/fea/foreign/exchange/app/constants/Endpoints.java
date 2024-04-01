@@ -7,4 +7,5 @@ public class Endpoints {
     public final static String CONVERSION = "/currency-conversions";
     public final static String CONVERT = "/convert";
     public final static String GET = "/get";
+    public final static String HISTORY = "/history";
 }

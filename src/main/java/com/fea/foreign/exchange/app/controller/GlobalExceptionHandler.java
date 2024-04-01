@@ -1,5 +1,6 @@
 package com.fea.foreign.exchange.app.controller;
 
+import com.fea.foreign.exchange.app.exceptions.IllegalParamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,5 +20,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleIOException(IOException ex){
         logger.error("An IOException occurred: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(EXTERNAL_SERVICE_FAIL);
+    }
+
+    @ExceptionHandler(IllegalParamException.class)
+    public ResponseEntity<String> handleIllegalArgument(IllegalParamException ex){
+        logger.error("An IllegalParamException occurred: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
 }
