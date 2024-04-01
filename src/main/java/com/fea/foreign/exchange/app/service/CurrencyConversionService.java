@@ -83,4 +83,5 @@ public class CurrencyConversionService {
         } else {
             return this.repository.findByTransactionIdAndTransactionDate(transactionID, transactionDate, pageable);
         }
-    }}
+    }
+}

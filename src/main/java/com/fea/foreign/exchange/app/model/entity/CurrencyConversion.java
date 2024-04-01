@@ -1,6 +1,7 @@
 package com.fea.foreign.exchange.app.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "currency_conversions")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class CurrencyConversion {
