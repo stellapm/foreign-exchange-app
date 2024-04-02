@@ -25,6 +25,8 @@ public class ExchangeRateController {
                                                   @RequestParam String targetCurrency) throws IOException {
         BigDecimal exchangeRate = this.exchangeRateService.fetchFxRateBySourceAndTarget(sourceCurrency, targetCurrency);
 
+        System.out.println(exchangeRate);
+
         return ResponseEntity.ok(exchangeRate);
     }
 }
