@@ -71,10 +71,7 @@ public class CurrencyConversionService {
     }
 
     private Page<CurrencyConversion> filterByTransactionIDOrDate(UUID transactionID, LocalDate transactionDate, Pageable pageable) {
-        if (transactionID == null && transactionDate == null){
-            throw new IllegalParamException(TRANSACTION_ID + ", " + TRANSACTION_DATE);
-        }
-
+        verifyBothArgumentsNotNull(transactionID, transactionDate);
 
         if (transactionID == null) {
             return this.repository.findByTransactionTimeStamp(transactionDate, pageable);
@@ -82,6 +79,12 @@ public class CurrencyConversionService {
             return this.repository.findByTransactionID(transactionID, pageable);
         } else {
             return this.repository.findByTransactionIdAndTransactionDate(transactionID, transactionDate, pageable);
+        }
+    }
+
+    private void verifyBothArgumentsNotNull(UUID transactionID, LocalDate transactionDate) {
+        if (transactionID == null && transactionDate == null){
+            throw new IllegalParamException(TRANSACTION_ID + ", " + TRANSACTION_DATE);
         }
     }
 }

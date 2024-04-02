@@ -4,6 +4,7 @@ import com.fea.foreign.exchange.app.model.dto.CurrencyConversionRequestDTO;
 import com.fea.foreign.exchange.app.model.view.CurrencyConversionInfoView;
 import com.fea.foreign.exchange.app.model.view.CurrencyConversionResponseView;
 import com.fea.foreign.exchange.app.service.CurrencyConversionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class CurrencyConversionController {
     }
 
     @PostMapping(CONVERT)
-    public ResponseEntity<CurrencyConversionResponseView> convertCurrency(@RequestBody CurrencyConversionRequestDTO currencyConversionRequestDTO) throws IOException {
+    public ResponseEntity<CurrencyConversionResponseView> convertCurrency(@RequestBody @Valid CurrencyConversionRequestDTO currencyConversionRequestDTO) throws IOException {
         CurrencyConversionResponseView response = this.currencyConversionService.convertCurrency(currencyConversionRequestDTO);
 
         return ResponseEntity.ok(response);

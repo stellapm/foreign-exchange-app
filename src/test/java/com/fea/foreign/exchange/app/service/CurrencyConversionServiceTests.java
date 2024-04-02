@@ -21,7 +21,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,7 +48,6 @@ public class CurrencyConversionServiceTests {
     private Pageable pageable;
     private LocalDate transactionDate;
     private UUID transactionID;
-    private Page<CurrencyConversionInfoView> historyResults;
     private Page<CurrencyConversion> mockPageFull;
     private CurrencyConversion conversion1;
     private CurrencyConversion conversion2;
@@ -57,7 +55,7 @@ public class CurrencyConversionServiceTests {
 
 
     @BeforeEach
-    public void setup() throws IOException {
+    public void setup() {
         this.testService = new CurrencyConversionService(mockRepository, mockExchangeService);
 
         requestDTO = new CurrencyConversionRequestDTO();
@@ -137,7 +135,7 @@ public class CurrencyConversionServiceTests {
 
     @Test
     public void testGetConversionHistoryThrowsExceptionOnMissingParams() {
-        Throwable failedFetch = assertThrows(IllegalParamException.class, () -> testService.getConversionHistory(null, null, pageable),
+        Throwable failedFetch = assertThrows(IllegalParamException.class, () -> testService.getConversionHistory(null, null, this.pageable),
                 "Should throw IllegalParamException if both transactionID and transactionDate are null");
 
         assertEquals("Please make sure all requested parameters are provided: Transaction ID, Transaction Date",
