@@ -17,3 +17,4 @@ spring:
         one-indexed-parameters: true
 app:
   currencyLayerAccessKey: ebeb1f255d0c5847c54c7a37de6b0ea8
+  exchangeRatesTTL: 3600000
