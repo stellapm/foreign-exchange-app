@@ -11,6 +11,6 @@ import java.util.List;
 public class SpringCacheCustomizer implements CacheManagerCustomizer<ConcurrentMapCacheManager> {
     @Override
     public void customize(ConcurrentMapCacheManager cacheManager) {
-        cacheManager.setCacheNames(List.of("exchangeRates", "currencies"));
+        cacheManager.setCacheNames(List.of("exchangeRates", "currencies", "conversionHistoryCache"));
     }
 }

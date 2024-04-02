@@ -1,5 +1,6 @@
 package com.fea.foreign.exchange.app.service;
 
+import com.fea.foreign.exchange.app.controller.GlobalExceptionHandler;
 import com.fea.foreign.exchange.app.exceptions.IllegalParamException;
 import com.fea.foreign.exchange.app.model.dto.CurrencyConversionRequestDTO;
 import com.fea.foreign.exchange.app.model.entity.CurrencyConversion;
@@ -7,7 +8,10 @@ import com.fea.foreign.exchange.app.model.mapper.CurrencyConversionMapper;
 import com.fea.foreign.exchange.app.model.view.CurrencyConversionInfoView;
 import com.fea.foreign.exchange.app.model.view.CurrencyConversionResponseView;
 import com.fea.foreign.exchange.app.repository.CurrencyConversionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +29,8 @@ import static com.fea.foreign.exchange.app.constants.General.TRANSACTION_ID;
 public class CurrencyConversionService {
     private final CurrencyConversionRepository repository;
     private final ExchangeRateService exchangeRateService;
+    Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
 
     @Autowired
     public CurrencyConversionService(CurrencyConversionRepository repository, ExchangeRateService exchangeRateService) {
@@ -61,8 +67,9 @@ public class CurrencyConversionService {
         return sourceAmount.multiply(exchangeRate);
     }
 
+    @Cacheable(value = "conversionHistoryCache", key = "#transactionID?.toString() + #transactionDate?.toString() + #pageable?.pageNumber + #pageable?.pageSize")
     public Page<CurrencyConversionInfoView> getConversionHistory(UUID transactionID, LocalDate transactionDate, Pageable pageable) {
-
+        logger.info("Fetching conversion history from database by transactionID and transactionDate");
 
         Page<CurrencyConversion> filteredConversionsPage = filterByTransactionIDOrDate(transactionID, transactionDate, pageable);
 
