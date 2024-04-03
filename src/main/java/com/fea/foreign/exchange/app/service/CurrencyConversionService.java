@@ -2,6 +2,7 @@ package com.fea.foreign.exchange.app.service;
 
 import com.fea.foreign.exchange.app.controller.GlobalExceptionHandler;
 import com.fea.foreign.exchange.app.exceptions.IllegalParamException;
+import com.fea.foreign.exchange.app.exceptions.ObjectNotFoundException;
 import com.fea.foreign.exchange.app.model.dto.CurrencyConversionRequestDTO;
 import com.fea.foreign.exchange.app.model.entity.CurrencyConversion;
 import com.fea.foreign.exchange.app.model.mapper.CurrencyConversionMapper;
@@ -73,8 +74,17 @@ public class CurrencyConversionService {
 
         Page<CurrencyConversion> filteredConversionsPage = filterByTransactionIDOrDate(transactionID, transactionDate, pageable);
 
+        checkIfPageableResultIsPresent(filteredConversionsPage);
+
+
         return filteredConversionsPage
                 .map(CurrencyConversionMapper.INSTANCE::conversionToConversionInfoView);
+    }
+
+    private void checkIfPageableResultIsPresent(Page<?> pageableResult) {
+        if (pageableResult.isEmpty()){
+            throw new ObjectNotFoundException();
+        }
     }
 
     private Page<CurrencyConversion> filterByTransactionIDOrDate(UUID transactionID, LocalDate transactionDate, Pageable pageable) {

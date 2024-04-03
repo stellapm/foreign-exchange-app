@@ -1,5 +1,6 @@
 package com.fea.foreign.exchange.app.model.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -15,11 +16,14 @@ import java.math.BigDecimal;
 @Setter
 public class CurrencyConversionRequestDTO {
     @Positive
+    @Schema(description = "Amount to be converted", example = "100.00")
     private BigDecimal sourceAmount;
 
     @NotBlank
+    @Schema(description = "Source currency code", example = "USD")
     private String sourceCurrency;
 
     @NotBlank
+    @Schema(description = "Target currency code", example = "EUR")
     private String targetCurrency;
 }

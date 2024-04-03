@@ -1,5 +1,6 @@
 package com.fea.foreign.exchange.app.service;
 import com.fea.foreign.exchange.app.exceptions.IllegalParamException;
+import com.fea.foreign.exchange.app.exceptions.ObjectNotFoundException;
 import com.fea.foreign.exchange.app.model.dto.CurrencyConversionRequestDTO;
 import com.fea.foreign.exchange.app.model.entity.CurrencyConversion;
 import com.fea.foreign.exchange.app.model.mapper.CurrencyConversionMapper;
@@ -142,6 +143,7 @@ public class CurrencyConversionServiceTests {
                 failedFetch.getMessage());
     }
 
+
     @Test
     public void testGetConversionHistoryByValidTransactionDate(){
         when(mockRepository.findByTransactionTimeStamp(this.transactionDate, this.pageable)).thenReturn(this.mockPageFull);
@@ -178,8 +180,10 @@ public class CurrencyConversionServiceTests {
 
         when(mockRepository.findByTransactionIdAndTransactionDate(newId, this.transactionDate, this.pageable)).thenReturn(new PageImpl<>(new ArrayList<>()));
 
-        Page<CurrencyConversionInfoView> results = this.testService.getConversionHistory(newId, this.transactionDate, this.pageable);
+        Throwable noResults = assertThrows(ObjectNotFoundException.class, () -> this.testService.getConversionHistory(newId, this.transactionDate, this.pageable),
+                "Should throw ObjectNotFoundException if no results are found by required criteria.");
 
-        assertEquals(0, results.getTotalElements(), "Page should not contain any matching transactions");
+        assertEquals("No data matching the provided criteria.",
+                noResults.getMessage());
     }
 }

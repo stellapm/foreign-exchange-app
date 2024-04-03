@@ -1,6 +1,7 @@
 package com.fea.foreign.exchange.app.controller;
 
 import com.fea.foreign.exchange.app.exceptions.IllegalParamException;
+import com.fea.foreign.exchange.app.exceptions.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -27,12 +28,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalParamException.class)
     public ResponseEntity<String> handleIllegalArgument(IllegalParamException ex){
         logger.error("An IllegalParamException occurred: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleArgumentNotValid(MethodArgumentNotValidException ex){
         logger.error("An MethodArgumentNotValidException occurred: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(INVALID_ARGUMENT);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(INVALID_ARGUMENT);
+    }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<String> handleArgumentNotValid(ObjectNotFoundException ex){
+        logger.error("An ObjectNotFoundException occurred: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }
