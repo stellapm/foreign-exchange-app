@@ -56,6 +56,6 @@ public class ExchangeRateServiceTests {
 
         BigDecimal result = this.testService.fetchFxRateBySourceAndTarget(VALID_SOURCE, VALID_TARGET);
 
-        assertEquals(BigDecimal.valueOf(0.928915), result);
+        assertEquals(0, result.compareTo(BigDecimal.valueOf(0.928915)));
     }
 }
